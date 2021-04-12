@@ -5,7 +5,7 @@
 -- Dumped from database version 9.6.20
 -- Dumped by pg_dump version 11.5
 
--- Started on 2021-04-12 19:34:51
+-- Started on 2021-04-12 20:21:19
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -167,9 +167,11 @@ CREATE TABLE "ProdNac2021".cdg (
     ano date,
     codmunicipio integer,
     coordpresen boolean,
-    epsgpres character varying(30),
+    epsgpres character varying(25),
     epsg integer,
-    escala integer
+    escala integer,
+    apunet_dig integer,
+    apunwt_analog integer
 );
 
 
@@ -581,7 +583,7 @@ ALTER TABLE ONLY "ProdNac2021".procedmetodolog
     ADD CONSTRAINT fk_procedmetodolog_ref_tipoacao FOREIGN KEY (fk_codacao) REFERENCES "ProdNac2021".tipoacao(codacao) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
--- Completed on 2021-04-12 19:34:51
+-- Completed on 2021-04-12 20:21:19
 
 --
 -- PostgreSQL database dump complete

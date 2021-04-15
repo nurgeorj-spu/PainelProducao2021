@@ -35,36 +35,66 @@ ALTER SCHEMA "ProdNac2021" OWNER TO postgres;
 
 CREATE FUNCTION "ProdNac2021".f_trigger_ins_geoaproximacao() RETURNS trigger
     LANGUAGE plpgsql
-    AS $$
-
-
-
--- Proposito: verifica se o valor informado para o campo fk_idCdg_apro ja existe na tabela georreferenciamento ou geolocalização.
-
-
-
-BEGIN
-
- -- regra 
-
- IF NOT EXISTS (SELECT 1 FROM "ProdNac2021".georreferenciamento WHERE fk_idCdg_geor = NEW.fk_idCdg_apro) and NOT EXISTS (SELECT 1 FROM "ProdNac2021".geolocalizacao WHERE fk_idCdg_geol = NEW.fk_idCdg_apro) THEN
-
-	
-
-   -- faz o insert
-
-   RETURN NEW;
-
-   -- do contrario ...
-
-   ELSE
-
-   -- rejeita!
-
-   RAISE EXCEPTION 'O Valor %',  NEW.fk_idCdg_apro  || ', fornecido para o campo fk_idCdg_geor, ja esta em uso em outra tabela.' USING HINT = 'Corrija e tente novamente';
-
- END IF;
-
+    AS $$
+
+
+
+
+
+
+
+-- Proposito: verifica se o valor informado para o campo fk_idCdg_apro ja existe na tabela georreferenciamento ou geolocalização.
+
+
+
+
+
+
+
+BEGIN
+
+
+
+ -- regra 
+
+
+
+ IF NOT EXISTS (SELECT 1 FROM "ProdNac2021".georreferenciamento WHERE fk_idCdg_geor = NEW.fk_idCdg_apro) and NOT EXISTS (SELECT 1 FROM "ProdNac2021".geolocalizacao WHERE fk_idCdg_geol = NEW.fk_idCdg_apro) THEN
+
+
+
+	
+
+
+
+   -- faz o insert
+
+
+
+   RETURN NEW;
+
+
+
+   -- do contrario ...
+
+
+
+   ELSE
+
+
+
+   -- rejeita!
+
+
+
+   RAISE EXCEPTION 'O Valor %',  NEW.fk_idCdg_apro  || ', fornecido para o campo fk_idCdg_geor, ja esta em uso em outra tabela.' USING HINT = 'Corrija e tente novamente';
+
+
+
+ END IF;
+
+
+
 END $$;
 
 
@@ -77,36 +107,66 @@ ALTER FUNCTION "ProdNac2021".f_trigger_ins_geoaproximacao() OWNER TO postgres;
 
 CREATE FUNCTION "ProdNac2021".f_trigger_ins_geolocalizacao() RETURNS trigger
     LANGUAGE plpgsql
-    AS $$
-
-
-
--- Proposito: verifica se o valor informado para o campo fk_idCdg_geol ja existe na tabela georreferenciamento ou geoaproximacao
-
-
-
-BEGIN
-
- -- regra 
-
- IF NOT EXISTS (SELECT 1 FROM "ProdNac2021".georreferenciamento WHERE fk_idCdg_geor = NEW.fk_idCdg_geol) and NOT EXISTS (SELECT 1 FROM "ProdNac2021".geoaproximacao WHERE fk_idCdg_apro = NEW.fk_idCdg_geol) THEN
-
-	
-
-   -- faz o insert
-
-   RETURN NEW;
-
-   -- do contrario ...
-
-   ELSE
-
-   -- rejeita!
-
-   RAISE EXCEPTION 'O Valor %',  NEW.fk_idCdg_geol  || ', fornecido para o campo fk_idCdg_geol, já está em uso em outra tabela.' USING HINT = 'Corrija e tente novamente';
-
- END IF;
-
+    AS $$
+
+
+
+
+
+
+
+-- Proposito: verifica se o valor informado para o campo fk_idCdg_geol ja existe na tabela georreferenciamento ou geoaproximacao
+
+
+
+
+
+
+
+BEGIN
+
+
+
+ -- regra 
+
+
+
+ IF NOT EXISTS (SELECT 1 FROM "ProdNac2021".georreferenciamento WHERE fk_idCdg_geor = NEW.fk_idCdg_geol) and NOT EXISTS (SELECT 1 FROM "ProdNac2021".geoaproximacao WHERE fk_idCdg_apro = NEW.fk_idCdg_geol) THEN
+
+
+
+	
+
+
+
+   -- faz o insert
+
+
+
+   RETURN NEW;
+
+
+
+   -- do contrario ...
+
+
+
+   ELSE
+
+
+
+   -- rejeita!
+
+
+
+   RAISE EXCEPTION 'O Valor %',  NEW.fk_idCdg_geol  || ', fornecido para o campo fk_idCdg_geol, já está em uso em outra tabela.' USING HINT = 'Corrija e tente novamente';
+
+
+
+ END IF;
+
+
+
 END $$;
 
 
@@ -119,36 +179,66 @@ ALTER FUNCTION "ProdNac2021".f_trigger_ins_geolocalizacao() OWNER TO postgres;
 
 CREATE FUNCTION "ProdNac2021".f_trigger_ins_georreferenciamento() RETURNS trigger
     LANGUAGE plpgsql
-    AS $$
-
-
-
--- Proposito: verifica se o valor informado para o campo fk_idCdg_geor ja existe na tabela geolocalizacao ou geoaproximacao
-
-
-
-BEGIN
-
- -- regra 
-
- IF NOT EXISTS (SELECT 1 FROM "ProdNac2021".geolocalizacao WHERE fk_idCdg_geol = NEW.fk_idCdg_geor) and NOT EXISTS (SELECT 1 FROM "ProdNac2021".geoaproximacao WHERE fk_idCdg_apro = NEW.fk_idCdg_geor) THEN
-
-	
-
-   -- faz o insert
-
-   RETURN NEW;
-
-   -- do contrario ...
-
-   ELSE
-
-   -- rejeita!
-
-   RAISE EXCEPTION 'O Valor %',  NEW.fk_idCdg_geor  || ', fornecido para o campo fk_idCdg_geor, ja esta em uso em outra tabela.' USING HINT = 'Corrija e tente novamente';
-
- END IF;
-
+    AS $$
+
+
+
+
+
+
+
+-- Proposito: verifica se o valor informado para o campo fk_idCdg_geor ja existe na tabela geolocalizacao ou geoaproximacao
+
+
+
+
+
+
+
+BEGIN
+
+
+
+ -- regra 
+
+
+
+ IF NOT EXISTS (SELECT 1 FROM "ProdNac2021".geolocalizacao WHERE fk_idCdg_geol = NEW.fk_idCdg_geor) and NOT EXISTS (SELECT 1 FROM "ProdNac2021".geoaproximacao WHERE fk_idCdg_apro = NEW.fk_idCdg_geor) THEN
+
+
+
+	
+
+
+
+   -- faz o insert
+
+
+
+   RETURN NEW;
+
+
+
+   -- do contrario ...
+
+
+
+   ELSE
+
+
+
+   -- rejeita!
+
+
+
+   RAISE EXCEPTION 'O Valor %',  NEW.fk_idCdg_geor  || ', fornecido para o campo fk_idCdg_geor, ja esta em uso em outra tabela.' USING HINT = 'Corrija e tente novamente';
+
+
+
+ END IF;
+
+
+
 END $$;
 
 
@@ -161,67 +251,128 @@ ALTER FUNCTION "ProdNac2021".f_trigger_ins_georreferenciamento() OWNER TO postgr
 
 CREATE FUNCTION "ProdNac2021".f_trigger_logbd() RETURNS trigger
     LANGUAGE plpgsql
-    AS $$
-
-
-
-
-
-/*-- Propósito: Insere na tabela logBD todas as operações realizadas na entidade CDG.
-
-A funões verifica uma cadeia de caracteres contendo INSERT, UPDATE, ou DELETE, e informa para qual operações o gatilho foi disparado (Tipo de dado text).*/
-
-
-BEGIN
-
-	IF (TG_OP = 'INSERT') THEN
-
-		INSERT INTO "ProdNac2021".logbd
-
-		(codlog, fk_idCdg_log, dataalteracao, usuario, operacao) 
-
-		VALUES
-
-		(NEXTVAL('"ProdNac2021".logbd_seq'), NEW.idCdg, current_timestamp, current_user, 'INSERT');
-
-		RETURN NEW;
-
-	
-
-	ELSIF (TG_OP = 'DELETE') THEN
-
-		INSERT INTO "ProdNac2021".logbd
-
-		(codlog, fk_idCdg_log, dataalteracao, usuario, operacao) 
-
-		VALUES
-
-		(NEXTVAL('"ProdNac2021".logbd_seq'), OLD.idCdg, current_timestamp, current_user, 'DELETE');
-
-		RETURN OLD;
-
-		
-
-	ELSIF (TG_OP = 'UPDATE') THEN
-
-		INSERT INTO "ProdNac2021".logbd
-
-		(codlog, fk_idCdg_log, dataalteracao, usuario, operacao)
-
-		VALUES
-
-		(NEXTVAL('"ProdNac2021".logbd_seq'), NEW.idCdg, current_timestamp, current_user, 'UPDATE');
-
-		RETURN NEW;		
-
-				
-
-	END IF;
-
-	RETURN NULL;
-
-END;
-
+    AS $$
+
+
+
+
+
+
+
+
+
+
+
+/*-- Propósito: Insere na tabela logBD todas as operações realizadas na entidade CDG.
+
+
+
+A funões verifica uma cadeia de caracteres contendo INSERT, UPDATE, ou DELETE, e informa para qual operações o gatilho foi disparado (Tipo de dado text).*/
+
+
+
+
+
+BEGIN
+
+
+
+	IF (TG_OP = 'INSERT') THEN
+
+
+
+		INSERT INTO "ProdNac2021".logbd
+
+
+
+		(codlog, fk_idCdg_log, dataalteracao, usuario, operacao) 
+
+
+
+		VALUES
+
+
+
+		(NEXTVAL('"ProdNac2021".logbd_seq'), NEW.idCdg, current_timestamp, current_user, 'INSERT');
+
+
+
+		RETURN NEW;
+
+
+
+	
+
+
+
+	ELSIF (TG_OP = 'DELETE') THEN
+
+
+
+		INSERT INTO "ProdNac2021".logbd
+
+
+
+		(codlog, fk_idCdg_log, dataalteracao, usuario, operacao) 
+
+
+
+		VALUES
+
+
+
+		(NEXTVAL('"ProdNac2021".logbd_seq'), OLD.idCdg, current_timestamp, current_user, 'DELETE');
+
+
+
+		RETURN OLD;
+
+
+
+		
+
+
+
+	ELSIF (TG_OP = 'UPDATE') THEN
+
+
+
+		INSERT INTO "ProdNac2021".logbd
+
+
+
+		(codlog, fk_idCdg_log, dataalteracao, usuario, operacao)
+
+
+
+		VALUES
+
+
+
+		(NEXTVAL('"ProdNac2021".logbd_seq'), NEW.idCdg, current_timestamp, current_user, 'UPDATE');
+
+
+
+		RETURN NEW;		
+
+
+
+				
+
+
+
+	END IF;
+
+
+
+	RETURN NULL;
+
+
+
+END;
+
+
+
 $$;
 
 
@@ -262,6 +413,11 @@ CREATE TABLE "ProdNac2021".cdg (
 
 
 ALTER TABLE "ProdNac2021".cdg OWNER TO postgres;
+
+ALTER TABLE "ProdNac2021".cdg ALTER COLUMN spunet_dig TYPE varchar USING spunet_dig::varchar;
+ALTER TABLE "ProdNac2021".cdg ALTER COLUMN spunet_analog TYPE varchar USING spunet_analog::varchar;
+ALTER TABLE "ProdNac2021".cdg ALTER COLUMN escala TYPE varchar USING escala::varchar;
+
 
 --
 -- TOC entry 187 (class 1259 OID 38192)

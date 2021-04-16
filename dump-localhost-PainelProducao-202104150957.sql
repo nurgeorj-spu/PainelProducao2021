@@ -4630,7 +4630,8 @@ ALTER TABLE ONLY "ProdNac2021".procedmetodolog
 ALTER TABLE ONLY "ProdNac2021".procedmetodolog
     ADD CONSTRAINT fk_procedmetodolog_ref_tipoacao FOREIGN KEY (fk_codacao) REFERENCES "ProdNac2021".tipoacao(codacao) ON UPDATE CASCADE ON DELETE CASCADE;
 
-
+ALTER TABLE "ProdNac2021".procedmetodolog DROP CONSTRAINT procedmetodolog_pk;
+ALTER TABLE "ProdNac2021".procedmetodolog ADD CONSTRAINT procedmetodolog_pk PRIMARY KEY (codproced);
 -- Completed on 2021-04-15 09:57:20
 
 --

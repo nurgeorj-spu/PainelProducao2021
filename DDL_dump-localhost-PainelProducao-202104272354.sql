@@ -1,7 +1,6 @@
 --
 -- PostgreSQL database dump
 --
-
 -- Dumped from database version 9.6.20
 -- Dumped by pg_dump version 11.5
 
@@ -495,4 +494,29 @@ ALTER TABLE ONLY "ProdNac2021".procedmetodolog
     ADD CONSTRAINT fk_procedmetodolog_ref_tipoacao FOREIGN KEY (fk_codacao) REFERENCES "ProdNac2021".tipoacao(codacao) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
+--
+-- TOC entry 398 (class 1259 OID 2529649)
+-- Name: vw_georr_cdg; Type: VIEW; Schema: ; Owner: geo
+--
+
+CREATE VIEW "ProdNac2021_Ficticio".vw_georr_cdg AS
+ SELECT g.codgeorr,
+    g.parecer,
+    g.verificacao,
+    g.fk_idcdg_geor,
+    c.idnacional,
+    c.uf,
+    c.nomeproduto,
+    c.nomecolecao,
+    c.ano,
+    c.codmunicipio,
+    c.coordpresen,
+    c.epsgpres,
+    c.epsg,
+    c.escala
+   FROM ("ProdNac2021_Ficticio".georreferenciamento g
+     JOIN "ProdNac2021_Ficticio".cdg c ON ((g.fk_idcdg_geor = c.idcdg)));
+
+
+ALTER TABLE "ProdNac2021_Ficticio".vw_georr_cdg OWNER TO geo;
 

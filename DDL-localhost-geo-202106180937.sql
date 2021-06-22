@@ -60,6 +60,44 @@ CREATE TYPE "ProdNac2021".tp_produtcdg AS ENUM (
 
 ALTER TYPE "ProdNac2021".tp_produtcdg OWNER TO geo;
 
+
+
+--
+-- Name: tp_parecer; Type: TYPE; Schema: ProdNac2021; Owner: geo
+--
+
+CREATE TYPE "ProdNac2021".tp_parecer AS ENUM (
+    'Aprovado',
+	'Não aprovado',
+	'Não se aplica'
+);
+
+ALTER TYPE "ProdNac2021".tp_parecer OWNER TO geo;
+
+--
+-- Name: tp_verificacao; Type: TYPE; Schema: ProdNac2021; Owner: geo
+--
+
+CREATE TYPE "ProdNac2021".tp_verificacao AS ENUM (
+    'Aprovado',
+	'Não aprovado',
+	'Não se aplica'
+);
+
+ALTER TYPE "ProdNac2021".tp_verificacao OWNER TO geo;
+
+--
+-- Name: tp_epsgpres; Type: TYPE; Schema: ProdNac2021; Owner: geo
+--
+
+CREATE TYPE "ProdNac2021".tp_epsgpres AS ENUM (
+    'Possui',
+    'Não possui',
+    'Inferido'
+);
+
+ALTER TYPE "ProdNac2021".tp_epsgpres OWNER TO geo;
+
 --
 -- Name: tp_uf; Type: TYPE; Schema: ProdNac2021; Owner: geo
 --
@@ -102,16 +140,16 @@ ALTER TYPE "ProdNac2021".tp_uf OWNER TO geo;
 CREATE FUNCTION "ProdNac2021".f_geoaproximacoes() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
--- Proposito: verifica se o valor informado para o campo fk_cdg_pk_idnacional_geoapro ja existe na tabela georreferenciamentos ou geolocalizacao.
+-- Proposito: verifica se o valor informado para o campo fk_cdgs_pk_idnacional_geoapro ja existe na tabela georreferenciamentos ou geolocalizacao.
 BEGIN
  -- regra 
- IF NOT EXISTS (SELECT 1 FROM "ProdNac2021".georreferenciamentos WHERE fk_cdg_pk_idnacional_geor = NEW.fk_cdg_pk_idnacional_geoapro) and NOT EXISTS (SELECT 1 FROM "ProdNac2021".geolocalizacoes WHERE fk_cdg_pk_idnacional_geol = NEW.fk_cdg_pk_idnacional_geoapro) THEN
+ IF NOT EXISTS (SELECT 1 FROM "ProdNac2021".georreferenciamentos WHERE fk_cdgs_pk_idnacional_geor = NEW.fk_cdgs_pk_idnacional_geoapro) and NOT EXISTS (SELECT 1 FROM "ProdNac2021".geolocalizacoes WHERE fk_cdgs_pk_idnacional_geol = NEW.fk_cdgs_pk_idnacional_geoapro) THEN
    -- faz o insert
    RETURN NEW;
    -- do contrario ...
    ELSE
    -- rejeita!
-   RAISE EXCEPTION 'O Valor %',  NEW.fk_cdg_pk_idnacional_geoapro  || ', fornecido para o campo fk_cdg_pk_idnacional_geor, ja esta em uso em outra tabela.' USING HINT = 'Corrija e tente novamente';
+   RAISE EXCEPTION 'O Valor %',  NEW.fk_cdgs_pk_idnacional_geoapro  || ', fornecido para o campo fk_cdgs_pk_idnacional_geor, ja esta em uso em outra tabela.' USING HINT = 'Corrija e tente novamente';
  END IF;
 END $$;
 
@@ -124,16 +162,16 @@ ALTER FUNCTION "ProdNac2021".f_geoaproximacoes() OWNER TO geo;
 CREATE FUNCTION "ProdNac2021".f_geolocalizacoes() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
--- Proposito: verifica se o valor informado para o campo fk_cdg_pk_idnacional_geol ja existe na tabela georreferenciamentos ou geoaproximacoes
+-- Proposito: verifica se o valor informado para o campo fk_cdgs_pk_idnacional_geol ja existe na tabela georreferenciamentos ou geoaproximacoes
 BEGIN
  -- regra 
- IF NOT EXISTS (SELECT 1 FROM "ProdNac2021".georreferenciamentos WHERE fk_cdg_pk_idnacional_geor = NEW.fk_cdg_pk_idnacional_geol) and NOT EXISTS (SELECT 1 FROM "ProdNac2021".geoaproximacoes WHERE fk_cdg_pk_idnacional_geoapro = NEW.fk_cdg_pk_idnacional_geol) THEN
+ IF NOT EXISTS (SELECT 1 FROM "ProdNac2021".georreferenciamentos WHERE fk_cdgs_pk_idnacional_geor = NEW.fk_cdgs_pk_idnacional_geol) and NOT EXISTS (SELECT 1 FROM "ProdNac2021".geoaproximacoes WHERE fk_cdgs_pk_idnacional_geoapro = NEW.fk_cdgs_pk_idnacional_geol) THEN
    -- faz o insert
    RETURN NEW;
    -- do contrario ...
    ELSE
    -- rejeita!
-   RAISE EXCEPTION 'O Valor %',  NEW.fk_cdg_pk_idnacional_geol  || ', fornecido para o campo fk_cdg_pk_idnacional_geol, ja esta em uso em outra tabela.' USING HINT = 'Corrija e tente novamente';
+   RAISE EXCEPTION 'O Valor %',  NEW.fk_cdgs_pk_idnacional_geol  || ', fornecido para o campo fk_cdgs_pk_idnacional_geol, ja esta em uso em outra tabela.' USING HINT = 'Corrija e tente novamente';
  END IF;
 END $$;
 
@@ -147,26 +185,26 @@ ALTER FUNCTION "ProdNac2021".f_geolocalizacoes() OWNER TO geo;
 CREATE FUNCTION "ProdNac2021".f_georreferenciamentos() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
--- Proposito: verifica se o valor informado para o campo fk_cdg_pk_idnacional_geor ja existe na tabela geolocalizacoes ou geoaproximacoes
+-- Proposito: verifica se o valor informado para o campo fk_cdgs_pk_idnacional_geor ja existe na tabela geolocalizacoes ou geoaproximacoes
 BEGIN
  -- regra 
- IF NOT EXISTS (SELECT 1 FROM "ProdNac2021".geolocalizacoes WHERE fk_cdg_pk_idnacional_geol = NEW.fk_cdg_pk_idnacional_geor) and NOT EXISTS (SELECT 1 FROM "ProdNac2021".geoaproximacoes WHERE fk_cdg_pk_idnacional_geoapro = NEW.fk_cdg_pk_idnacional_geor) THEN
+ IF NOT EXISTS (SELECT 1 FROM "ProdNac2021".geolocalizacoes WHERE fk_cdgs_pk_idnacional_geol = NEW.fk_cdgs_pk_idnacional_geor) and NOT EXISTS (SELECT 1 FROM "ProdNac2021".geoaproximacoes WHERE fk_cdgs_pk_idnacional_geoapro = NEW.fk_cdgs_pk_idnacional_geor) THEN
    -- faz o insert
    RETURN NEW;
    -- do contrario ...
    ELSE
    -- rejeita!
-   RAISE EXCEPTION 'O Valor %',  NEW.fk_cdg_pk_idnacional_geor  || ', fornecido para o campo fk_cdg_pk_idnacional_geor, ja esta em uso em outra tabela.' USING HINT = 'Corrija e tente novamente';
+   RAISE EXCEPTION 'O Valor %',  NEW.fk_cdgs_pk_idnacional_geor  || ', fornecido para o campo fk_cdgs_pk_idnacional_geor, ja esta em uso em outra tabela.' USING HINT = 'Corrija e tente novamente';
  END IF;
 END $$;
 
 ALTER FUNCTION "ProdNac2021".f_georreferenciamentos() OWNER TO geo;
 
 --
--- Name: f_logbd(); Type: FUNCTION; Schema: ProdNac2021; Owner: geo
+-- Name: f_logsbd(); Type: FUNCTION; Schema: ProdNac2021; Owner: geo
 --
 
-CREATE FUNCTION "ProdNac2021".f_logbd() RETURNS trigger
+CREATE FUNCTION "ProdNac2021".f_logsbd() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 
@@ -177,19 +215,19 @@ A funcoes verifica uma cadeia de caracteres contendo INSERT, UPDATE, ou DELETE, 
 BEGIN
 	IF (TG_OP = 'INSERT') THEN
 		INSERT INTO "ProdNac2021".logsbd
-		(pk_codlog, cdg_idcdg_log, cdg_idnacional_log, dataalteracao, usuario, operacao) 
+		(pk_codlog, cdg_idcdg_log, cdg_pk_idnacional_log, dataalteracao, usuario, operacao) 
 		VALUES
 		(NEXTVAL('"ProdNac2021".logsbd_pk_codlog_seq'), NEW.idcdg, NEW.pk_idnacional, current_timestamp, current_user, 'INSERT');
 		RETURN NEW;
 	ELSIF (TG_OP = 'DELETE') THEN
 		INSERT INTO "ProdNac2021".logsbd
-		(pk_codlog, cdg_idcdg_log, cdg_idnacional_log, dataalteracao, usuario, operacao) 
+		(pk_codlog, cdg_idcdg_log, cdg_pk_idnacional_log, dataalteracao, usuario, operacao) 
 		VALUES
 		(NEXTVAL('"ProdNac2021".logsbd_pk_codlog_seq'), OLD.idcdg, OLD.pk_idnacional, current_timestamp, current_user, 'DELETE');
 		RETURN OLD;
 	ELSIF (TG_OP = 'UPDATE') THEN
 		INSERT INTO "ProdNac2021".logsbd
-		(pk_codlog, cdg_idcdg_log, cdg_idnacional_log, dataalteracao, usuario, operacao) 
+		(pk_codlog, cdg_idcdg_log, cdg_pk_idnacional_log, dataalteracao, usuario, operacao) 
 		VALUES
 		(NEXTVAL('"ProdNac2021".logsbd_pk_codlog_seq'), NEW.idcdg, NEW.pk_idnacional, current_timestamp, current_user, 'UPDATE');
 		RETURN NEW;		
@@ -200,7 +238,7 @@ END;
 $$;
 
 
-ALTER FUNCTION "ProdNac2021".f_logbd() OWNER TO geo;
+ALTER FUNCTION "ProdNac2021".f_logsbd() OWNER TO geo;
 
 SET default_tablespace = '';
 SET default_with_oids = false;
@@ -210,27 +248,27 @@ SET default_with_oids = false;
 --
 
 CREATE TABLE "ProdNac2021".cdgs (
-    idcdg SERIAL NOT NULL,
-    pk_idnacional character varying(7) NOT NULL,
-    uf "ProdNac2021".tp_uf,
-    cadastrador character varying(250),
-    prodlocali "ProdNac2021".tp_prodlocali NOT NULL,
-    nomeproduto character varying(250),
-    producao character varying(100),
-    patriarmazen character varying(100),
-    nprocesso character varying(100),
-    formatocdg "ProdNac2021".tp_formatocdg NOT NULL,
-    produtcdg "ProdNac2021".tp_produtcdg,
-    nomecolecao character varying(250),
-    tipobemuni character varying(100),
-    ano integer,
-    codmunicipio integer,
-    coordpresen "ProdNac2021".tp_coordpresen,
-    epsgpres character varying(25),
-    epsg integer,
-    escala integer,
-    spunet_dig character varying(20),
-    spunet_analog character varying(20)
+	idcdg serial NOT NULL,
+	pk_idnacional varchar(7) NOT NULL,
+	uf "ProdNac2021"."tp_uf" NOT NULL,
+	cadastrador varchar(250) NOT NULL,
+	prodlocali "ProdNac2021"."tp_prodlocali" NOT NULL,
+	nomeproduto varchar(250) NOT NULL,
+	producao varchar(100) NULL,
+	patriarmazen varchar(100) NULL,
+	nprocesso varchar(100) NULL,
+	formatocdg "ProdNac2021"."tp_formatocdg" NOT NULL,
+	produtcdg "ProdNac2021"."tp_produtcdg" NOT NULL,
+	nomecolecao varchar(250) NULL,
+	tipobemuni varchar(100) NULL,
+	ano integer NULL,
+	codmunicipio integer NULL,
+	coordpresen "ProdNac2021"."tp_coordpresen" NOT NULL,
+	epsg integer NULL,
+	epsgpres "ProdNac2021".tp_epsgpres NOT NULL,
+	escala integer NOT NULL,
+	spunet_dig varchar(20) NULL,
+	spunet_analog varchar(20) NULL	
 );
 
 ALTER TABLE "ProdNac2021".cdgs OWNER TO geo;
@@ -241,8 +279,8 @@ ALTER TABLE "ProdNac2021".cdgs OWNER TO geo;
 
 CREATE TABLE "ProdNac2021".geoaproximacoes (
     pk_codapro serial NOT NULL,
-    parecer character varying(25) NOT NULL,
-    fk_cdg_pk_idnacional_geoapro character varying(7) NOT NULL
+    parecer "ProdNac2021".tp_parecer NOT NULL,
+    fk_cdgs_pk_idnacional_geoapro character varying(7) NOT NULL
 );
 
 ALTER TABLE "ProdNac2021".geoaproximacoes OWNER TO geo;
@@ -253,8 +291,8 @@ ALTER TABLE "ProdNac2021".geoaproximacoes OWNER TO geo;
 
 CREATE TABLE "ProdNac2021".geolocalizacoes (
     pk_codgeoloc serial NOT NULL,
-    parecer character varying(25),
-    fk_cdg_pk_idnacional_geol character varying(7)
+    parecer "ProdNac2021".tp_parecer NOT NULL,
+    fk_cdgs_pk_idnacional_geol character varying(7)  NOT NULL
 );
 
 ALTER TABLE "ProdNac2021".geolocalizacoes OWNER TO geo;
@@ -265,9 +303,9 @@ ALTER TABLE "ProdNac2021".geolocalizacoes OWNER TO geo;
 
 CREATE TABLE "ProdNac2021".georreferenciamentos (
     pk_codgeorr serial NOT NULL,
-    parecer character varying(25) NOT NULL,
-    verificacao character varying(25),
-    fk_cdg_pk_idnacional_geor character varying(7) NOT NULL
+    parecer "ProdNac2021".tp_parecer NOT NULL,
+    verificacao "ProdNac2021".tp_verificacao,
+    fk_cdgs_pk_idnacional_geor character varying(7) NOT NULL
 );
 
 ALTER TABLE "ProdNac2021".georreferenciamentos OWNER TO geo;
@@ -281,8 +319,8 @@ CREATE TABLE "ProdNac2021".logsbd (
     dataalteracao date NOT NULL,
     usuario character varying(50) NOT NULL,
     operacao character varying(10) NOT NULL,
-    cdg_idcdg_log integer NOT null,
-	cdg_idnacional_log character varying(7)
+    cdg_idcdg_log integer NOT NULL,
+	cdg_pk_idnacional_log character varying(7) NOT NULL
 );
 
 ALTER TABLE "ProdNac2021".logsbd OWNER TO geo;
@@ -294,8 +332,8 @@ ALTER TABLE "ProdNac2021".logsbd OWNER TO geo;
 CREATE TABLE "ProdNac2021".procedmetodologicos (
     pk_codproced serial NOT NULL,
     datap date,
-    fk_profis_codprof_proced integer NOT NULL,
-    fk_tipoacoes_codacao_proced integer NOT NULL,
+    fk_profis_pk_codprof_proced integer NOT NULL,
+    fk_tipoacoes_pk_codacao_proced integer NOT NULL,
     fk_cdgs_pk_idnacional_proced character varying(7)
 );
 
@@ -568,10 +606,10 @@ CREATE TRIGGER t_georreferenciamentos BEFORE INSERT ON "ProdNac2021".georreferen
 
 
 --
--- Name: cdgs t_logbd; Type: TRIGGER; Schema: ProdNac2021; Owner: geo
+-- Name: cdgs t_logsbd; Type: TRIGGER; Schema: ProdNac2021; Owner: geo
 --
 
-CREATE TRIGGER t_logbd AFTER INSERT OR DELETE OR UPDATE ON "ProdNac2021".cdgs FOR EACH ROW EXECUTE PROCEDURE "ProdNac2021".f_logbd();
+CREATE TRIGGER t_logsbd AFTER INSERT OR DELETE OR UPDATE ON "ProdNac2021".cdgs FOR EACH ROW EXECUTE PROCEDURE "ProdNac2021".f_logbd();
 
 
 --
@@ -579,7 +617,7 @@ CREATE TRIGGER t_logbd AFTER INSERT OR DELETE OR UPDATE ON "ProdNac2021".cdgs FO
 --
 
 ALTER TABLE ONLY "ProdNac2021".geoaproximacoes
-    ADD CONSTRAINT fk_geoaproximacoes_ref_cdg FOREIGN KEY (fk_cdg_pk_idnacional_geoapro) REFERENCES "ProdNac2021".cdgs(pk_idnacional) ON UPDATE CASCADE ON DELETE CASCADE;
+    ADD CONSTRAINT fk_geoaproximacoes_ref_cdg FOREIGN KEY (fk_cdgs_pk_idnacional_geoapro) REFERENCES "ProdNac2021".cdgs(pk_idnacional) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -587,7 +625,7 @@ ALTER TABLE ONLY "ProdNac2021".geoaproximacoes
 --
 
 ALTER TABLE ONLY "ProdNac2021".geolocalizacoes
-    ADD CONSTRAINT fk_geolocalizacoes_ref_cdg FOREIGN KEY (fk_cdg_pk_idnacional_geol) REFERENCES "ProdNac2021".cdgs(pk_idnacional) ON UPDATE CASCADE ON DELETE CASCADE;
+    ADD CONSTRAINT fk_geolocalizacoes_ref_cdg FOREIGN KEY (fk_cdgs_pk_idnacional_geol) REFERENCES "ProdNac2021".cdgs(pk_idnacional) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -595,7 +633,7 @@ ALTER TABLE ONLY "ProdNac2021".geolocalizacoes
 --
 
 ALTER TABLE ONLY "ProdNac2021".georreferenciamentos
-    ADD CONSTRAINT fk_georreferenciamentos_ref_cdg FOREIGN KEY (fk_cdg_pk_idnacional_geor) REFERENCES "ProdNac2021".cdgs(pk_idnacional) ON UPDATE CASCADE ON DELETE CASCADE;
+    ADD CONSTRAINT fk_georreferenciamentos_ref_cdg FOREIGN KEY (fk_cdgs_pk_idnacional_geor) REFERENCES "ProdNac2021".cdgs(pk_idnacional) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -611,7 +649,7 @@ ALTER TABLE ONLY "ProdNac2021".procedmetodologicos
 --
 
 ALTER TABLE ONLY "ProdNac2021".procedmetodologicos
-    ADD CONSTRAINT fk_procedmetodologicos_ref_profissional FOREIGN KEY (fk_profis_codprof_proced) REFERENCES "ProdNac2021".profissionais(pk_codprof) ON UPDATE CASCADE ON DELETE CASCADE;
+    ADD CONSTRAINT fk_procedmetodologicos_ref_profissional FOREIGN KEY (fk_profis_pk_codprof_proced) REFERENCES "ProdNac2021".profissionais(pk_codprof) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -619,7 +657,7 @@ ALTER TABLE ONLY "ProdNac2021".procedmetodologicos
 --
 
 ALTER TABLE ONLY "ProdNac2021".procedmetodologicos
-    ADD CONSTRAINT fk_procedmetodologicos_ref_tipoacao FOREIGN KEY (fk_tipoacoes_codacao_proced) REFERENCES "ProdNac2021".tipoacoes(pk_codacao) ON UPDATE CASCADE ON DELETE CASCADE;
+    ADD CONSTRAINT fk_procedmetodologicos_ref_tipoacao FOREIGN KEY (fk_tipoacoes_pk_codacao_proced) REFERENCES "ProdNac2021".tipoacoes(pk_codacao) ON UPDATE CASCADE ON DELETE CASCADE;
 
 -- Completed on 2021-06-17 17:19:28
 
@@ -629,4 +667,26 @@ ALTER TABLE ONLY "ProdNac2021".procedmetodologicos
 
 
 
+CREATE OR REPLACE VIEW "ProdNac2021".vw_georr_cdgs
+AS SELECT g.pk_codgeorr,
+    g.parecer,
+    g.verificacao,
+    g.fk_cdgs_pk_idnacional_geor,
+    c.pk_idnacional,
+    c.uf,
+    c.nomeproduto,
+    c.nomecolecao,
+    c.ano,
+    c.codmunicipio,
+    c.coordpresen,
+    c.epsgpres,
+    c.epsg,
+    c.escala
+   FROM "ProdNac2021".georreferenciamentos g
+     JOIN "ProdNac2021".cdgs c ON g.fk_cdgs_pk_idnacional_geor = c.pk_idnacional;
+
+-- Permissions
+
+ALTER TABLE "ProdNac2021".vw_georr_cdgs OWNER TO geo;
+GRANT ALL ON TABLE "ProdNac2021".vw_georr_cdgs TO geo;
 

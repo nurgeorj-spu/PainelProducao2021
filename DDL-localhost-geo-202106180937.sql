@@ -155,6 +155,10 @@ END $$;
 
 ALTER FUNCTION "ProdNac2021".f_geoaproximacoes() OWNER TO geo;
 
+
+
+
+
 --
 -- Name: f_geolocalizacoes(); Type: FUNCTION; Schema: ProdNac2021; Owner: geo
 --
@@ -178,6 +182,8 @@ END $$;
 
 ALTER FUNCTION "ProdNac2021".f_geolocalizacoes() OWNER TO geo;
 
+
+
 --
 -- Name: f_georreferenciamentos(); Type: FUNCTION; Schema: ProdNac2021; Owner: geo
 --
@@ -199,6 +205,10 @@ BEGIN
 END $$;
 
 ALTER FUNCTION "ProdNac2021".f_georreferenciamentos() OWNER TO geo;
+
+
+
+
 
 --
 -- Name: f_logsbd(); Type: FUNCTION; Schema: ProdNac2021; Owner: geo
@@ -414,12 +424,6 @@ CREATE TABLE "ProdNac2021".tipoacoes (
 
 ALTER TABLE "ProdNac2021".tipoacoes OWNER TO geo;
 
---
--- Name: tipoacoes_pk_codacao_seq; Type: SEQUENCE OWNED BY; Schema: ProdNac2021; Owner: geo
---
-
-ALTER SEQUENCE "ProdNac2021".tipoacoes_pk_codacao_seq OWNED BY "ProdNac2021".tipoacoes.pk_codacao;
-
 
 --
 -- Name: cdgs idcdg; Type: DEFAULT; Schema: ProdNac2021; Owner: geo
@@ -609,7 +613,7 @@ CREATE TRIGGER t_georreferenciamentos BEFORE INSERT ON "ProdNac2021".georreferen
 -- Name: cdgs t_logsbd; Type: TRIGGER; Schema: ProdNac2021; Owner: geo
 --
 
-CREATE TRIGGER t_logsbd AFTER INSERT OR DELETE OR UPDATE ON "ProdNac2021".cdgs FOR EACH ROW EXECUTE PROCEDURE "ProdNac2021".f_logbd();
+CREATE TRIGGER t_logsbd AFTER INSERT OR DELETE OR UPDATE ON "ProdNac2021".cdgs FOR EACH ROW EXECUTE PROCEDURE "ProdNac2021".f_logsbd();
 
 
 --
